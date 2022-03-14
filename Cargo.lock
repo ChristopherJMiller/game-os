@@ -3,6 +3,11 @@
 version = 3
 
 [[package]]
+name = "bare-metal"
+version = "1.0.0"
+source = "git+https://github.com/rust-embedded/bare-metal.git?rev=577042c6d9446ea2806c155a75e68ca8da50866c#577042c6d9446ea2806c155a75e68ca8da50866c"
+
+[[package]]
 name = "cortex-a"
 version = "7.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -15,6 +20,7 @@ dependencies = [
 name = "game-console"
 version = "0.1.0"
 dependencies = [
+ "bare-metal",
  "cortex-a",
 ]
 

@@ -11,6 +11,7 @@ mod io;
 
 unsafe fn kernel_main() -> ! {
   println!("[0] Hello from Rust!");
+  println!("[1] Hello from Rust!");
 
   panic!("Stopping here.")
 }

@@ -51,7 +51,7 @@ KERNEL_ELF = target/$(TARGET)/release/kernel
 ## Command building blocks
 ##--------------------------------------------------------------------------------------------------
 RUSTFLAGS          = -C link-arg=-T$(LINKER_FILE) $(RUSTC_MISC_ARGS)
-RUSTFLAGS_PEDANTIC = $(RUSTFLAGS) -D warnings
+RUSTFLAGS_PEDANTIC = $(RUSTFLAGS) #-D warnings
 
 FEATURES      = --features bsp_$(BSP)
 COMPILER_ARGS = --target=$(TARGET) \
@@ -104,8 +104,8 @@ qemu:
 else # QEMU is supported.
 
 qemu: $(KERNEL_BIN)
-	echo "\nLaunching QEMU"
-	qemu-system-aarch64 $(QEMU_RELEASE_ARGS) -M $(QEMU_MACHINE_TYPE) -kernel $(KERNEL_BIN)
+	@echo "Launching QEMU"
+	@qemu-system-aarch64 $(QEMU_RELEASE_ARGS) -M $(QEMU_MACHINE_TYPE) -kernel $(KERNEL_BIN)
 endif
 
 ##------------------------------------------------------------------------------
