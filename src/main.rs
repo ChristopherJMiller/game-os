@@ -10,7 +10,7 @@ extern crate alloc;
 use core::cell::UnsafeCell;
 
 use bsp::alloc::ALLOCATOR;
-
+use embedded_graphics::{prelude::*, primitives::{Circle, PrimitiveStyle}, pixelcolor::{Gray8, Rgb888}, mono_font::{MonoTextStyle, iso_8859_13::FONT_6X10, ascii::FONT_9X18_BOLD}, text::Text};
 use crate::bsp::{mailbox::{PropertyMessage, send_property_messages}, framebuffer::FrameBuffer};
 
 mod cpu;
@@ -67,7 +67,7 @@ unsafe fn kernel_main() -> ! {
     ]);
 
     if let Ok(buffer) = buffer {
-      let framebuffer = FrameBuffer::new(
+      let mut framebuffer = FrameBuffer::new(
         dimensions[5], 
         dimensions[6],
         24,
@@ -78,12 +78,8 @@ unsafe fn kernel_main() -> ! {
       info!("Buffer Location {:#01x}", buffer[5]);
       info!("Buffer Size {:#01x}", buffer[6]);
 
-      for x in 5..100 {
-        for y in 5..100 {
-          framebuffer.draw_pixel([x, y], &[0xff, 0xff, 0xff]);
-        }
-      }
-
+      let style = MonoTextStyle::new(&FONT_9X18_BOLD, Rgb888::WHITE);
+      Text::new("Hello world!", Point::new(5, 15), style).draw(&mut framebuffer).unwrap();
     }
   }
 
