@@ -1,10 +1,9 @@
-use core::{cell::RefCell, arch::asm};
+use core::{cell::RefCell};
 
 use alloc::vec::Vec;
 use bare_metal::Mutex;
-use cortex_a::asm::{self, barrier::isb};
 
-use crate::{cpu::free, info, mailbox_heap_location};
+use crate::{cpu::free, mem::mailbox_heap_location};
 
 /// Mailbox Inner Components
 pub struct MailBoxInner;
@@ -21,14 +20,12 @@ impl MailBox {
 
 #[derive(Copy, Clone)]
 pub enum MailboxChannel {
-  Framebuffer,
   Property,
 }
 
 impl Into<u32> for MailboxChannel {
   fn into(self) -> u32 {
     match self {
-      MailboxChannel::Framebuffer => 1,
       MailboxChannel::Property => 8,
     }
   }

@@ -34,8 +34,8 @@ pub fn enable_interrupts() {
 
 #[inline]
 pub fn free<F, R>(f: F) -> R where F: FnOnce(&CriticalSection) -> R {
-  //disable_interrupts();
+  disable_interrupts();
   let r = f(unsafe { &CriticalSection::new() });
-  //enable_interrupts();
+  enable_interrupts();
   r
 }

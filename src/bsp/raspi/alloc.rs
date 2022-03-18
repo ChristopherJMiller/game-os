@@ -1,7 +1,6 @@
 use core::alloc::{GlobalAlloc, Layout};
 use core::cell::RefCell;
 use core::ptr::{self, NonNull};
-use crate::{println, info};
 
 use bare_metal::Mutex;
 use linked_list_allocator::Heap;
