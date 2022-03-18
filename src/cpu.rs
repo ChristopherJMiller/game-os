@@ -4,4 +4,5 @@ mod arch_cpu;
 
 mod boot;
 
+#[cfg(target_arch = "aarch64")]
 pub use arch_cpu::*;

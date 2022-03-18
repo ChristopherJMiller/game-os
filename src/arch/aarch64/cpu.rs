@@ -11,7 +11,7 @@ pub fn wait_forever() -> ! {
 }
 
 #[inline(always)]
-pub fn disable_int() {
+pub fn disable_interrupts() {
   #[cfg(target_arch = "aarch64")]
   unsafe {
     asm!("msr daifset, #15", options(nomem, nostack, preserves_flags))
@@ -22,7 +22,7 @@ pub fn disable_int() {
 }
 
 #[inline(always)]
-pub fn enable_int() {
+pub fn enable_interrupts() {
   #[cfg(target_arch = "aarch64")]
   unsafe {
     asm!("msr daifset, #0", options(nomem, nostack, preserves_flags))
@@ -33,9 +33,9 @@ pub fn enable_int() {
 }
 
 #[inline]
-pub fn free<F, R>(f: F) -> R where F: FnOnce(&CriticalSection) -> R, {
-  disable_int();
+pub fn free<F, R>(f: F) -> R where F: FnOnce(&CriticalSection) -> R {
+  //disable_interrupts();
   let r = f(unsafe { &CriticalSection::new() });
-  enable_int();
+  //enable_interrupts();
   r
 }
