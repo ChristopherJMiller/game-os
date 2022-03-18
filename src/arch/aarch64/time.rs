@@ -6,15 +6,18 @@
 //!
 //! # Orientation
 //!
-//! Since arch modules are imported into generic modules using the path attribute, the path of this
-//! file is:
+//! Since arch modules are imported into generic modules using the path
+//! attribute, the path of this file is:
 //!
 //! crate::time::arch_time
 
-use crate::{time, warn};
 use core::time::Duration;
-use cortex_a::{asm::barrier, registers::*};
+
+use cortex_a::asm::barrier;
+use cortex_a::registers::*;
 use tock_registers::interfaces::{ReadWriteable, Readable, Writeable};
+
+use crate::{time, warn};
 
 //--------------------------------------------------------------------------------------------------
 // Private Definitions
@@ -81,7 +84,7 @@ impl time::interface::TimeManager for GenericTimer {
       None => {
         warn!("Spin duration too long, skipping");
         return;
-      }
+      },
       Some(val) => val,
     };
     let tval = x / NS_PER_S;
@@ -97,18 +100,15 @@ impl time::interface::TimeManager for GenericTimer {
     };
 
     if let Some(w) = warn {
-      warn!(
-        "Spin duration {} than architecturally supported, skipping",
-        w
-      );
+      warn!("Spin duration {} than architecturally supported, skipping", w);
       return;
     }
 
     // Set the compare value register.
     CNTP_TVAL_EL0.set(tval);
 
-    // Kick off the counting.                       
-    
+    // Kick off the counting.
+
     // Disable timer interrupt.
     CNTP_CTL_EL0.modify(CNTP_CTL_EL0::ENABLE::SET + CNTP_CTL_EL0::IMASK::SET);
 

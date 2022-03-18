@@ -1,4 +1,7 @@
-use embedded_graphics::{draw_target::DrawTarget, prelude::{OriginDimensions, Size, RgbColor}, pixelcolor::Rgb888, Pixel};
+use embedded_graphics::draw_target::DrawTarget;
+use embedded_graphics::pixelcolor::Rgb888;
+use embedded_graphics::prelude::{OriginDimensions, RgbColor, Size};
+use embedded_graphics::Pixel;
 
 use crate::warn;
 
@@ -23,7 +26,7 @@ impl FrameBuffer {
       pitch: width * (depth / 8),
       buf,
       buf_size,
-      working_buf
+      working_buf,
     }
   }
 
@@ -48,11 +51,13 @@ impl DrawTarget for FrameBuffer {
   type Error = core::convert::Infallible;
 
   fn draw_iter<I>(&mut self, pixels: I) -> Result<(), Self::Error>
-    where I: IntoIterator<Item = embedded_graphics::Pixel<Self::Color>> {
+  where
+    I: IntoIterator<Item = embedded_graphics::Pixel<Self::Color>>,
+  {
     for Pixel(coord, color) in pixels.into_iter() {
       let (x, y) = coord.into();
       let (x, y) = (x.min(self.width as i32), y.min(self.height as i32));
-        self.draw_pixel([x as u32, y as u32], &[color.r(), color.g(), color.b()]);
+      self.draw_pixel([x as u32, y as u32], &[color.r(), color.g(), color.b()]);
     }
 
     Ok(())

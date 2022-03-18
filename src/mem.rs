@@ -1,7 +1,7 @@
-
 use core::cell::UnsafeCell;
 
-use crate::{bsp::alloc::ALLOCATOR, info};
+use crate::bsp::alloc::ALLOCATOR;
+use crate::info;
 
 extern "Rust" {
   static __bss_end_exclusive: UnsafeCell<()>;
@@ -14,7 +14,7 @@ fn heap_start() -> usize {
 }
 
 const fn heap_size() -> usize {
-  1024 * 1024 * 128  // 128 MiB
+  1024 * 1024 * 128 // 128 MiB
 }
 
 fn heap_end() -> usize {

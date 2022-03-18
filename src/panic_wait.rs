@@ -1,4 +1,5 @@
 use core::panic::PanicInfo;
+
 use crate::{cpu, panic_println};
 
 #[panic_handler]

@@ -1,9 +1,10 @@
-use core::{cell::RefCell};
-
 use alloc::vec::Vec;
+use core::cell::RefCell;
+
 use bare_metal::Mutex;
 
-use crate::{cpu::free, mem::mailbox_heap_location};
+use crate::cpu::free;
+use crate::mem::mailbox_heap_location;
 
 /// Mailbox Inner Components
 pub struct MailBoxInner;
@@ -35,7 +36,6 @@ const MAILBOX_BASE: u32 = 0x3F00B880;
 const MAILBOX_READ: u32 = MAILBOX_BASE + 0x0;
 const MAILBOX_STATUS: u32 = MAILBOX_BASE + 0x18;
 const MAILBOX_WRITE: u32 = MAILBOX_BASE + 0x20;
-
 
 /// Global instance of Mailbox Framebuffer
 const MAILBOX: MailBox = MailBox::new();
@@ -99,7 +99,7 @@ impl From<u32> for MailMessage {
   fn from(message: u32) -> Self {
     Self {
       channel: (message & 0xF) as u8,
-      data: (message & 0xFFFF_FFF0) >> 4
+      data: (message & 0xFFFF_FFF0) >> 4,
     }
   }
 }
@@ -107,7 +107,7 @@ impl From<u32> for MailMessage {
 #[derive(Debug)]
 pub struct MailStatus {
   pub empty: bool,
-  pub full: bool
+  pub full: bool,
 }
 
 impl From<u32> for MailStatus {
@@ -170,7 +170,7 @@ impl Into<u32> for &PropertyMessage {
 pub enum BufferRequestResultCode {
   Request,
   ResponseSuccess,
-  ResponseError
+  ResponseError,
 }
 
 impl Into<u32> for BufferRequestResultCode {
@@ -195,7 +195,9 @@ impl BufferRequestResultCode {
 }
 
 pub fn build_property_message_buffer(properties: &[PropertyMessage]) -> Vec<u32> {
-  let tag_buffers = properties.iter().fold(Vec::<u32>::new(), |acc, x| [acc, x.to_buffer()].concat());
+  let tag_buffers = properties
+    .iter()
+    .fold(Vec::<u32>::new(), |acc, x| [acc, x.to_buffer()].concat());
   let mut all_tags = [tag_buffers, PropertyMessage::get_end_buffer().to_vec()].concat();
   // 16 byte align
   let additional_padding = (16 - (((all_tags.len() + 2) * 4) % 16)) >> 2;
@@ -215,7 +217,9 @@ pub fn send_property_messages(properties: &[PropertyMessage]) -> Result<Vec<u32>
       lock.send(MailboxChannel::Property, buffer);
       // Wait for Response
       lock.read(MailboxChannel::Property);
-      unsafe { update_property_message(buffer); }
+      unsafe {
+        update_property_message(buffer);
+      }
     } else {
       panic!("Failed to send property to mailbox");
     }

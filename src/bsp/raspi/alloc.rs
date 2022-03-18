@@ -30,12 +30,12 @@ unsafe impl GlobalAlloc for SharedHeap {
     free(|cs| {
       if let Ok(mut lock) = self.0.borrow(*cs).try_borrow_mut() {
         lock
-        .allocate_first_fit(layout)
-        .ok()
-        .map_or(ptr::null_mut(), |a| a.as_ptr())
+          .allocate_first_fit(layout)
+          .ok()
+          .map_or(ptr::null_mut(), |a| a.as_ptr())
       } else {
         panic!("Failed to get lock on shared heap. Already borrowed?");
-      } 
+      }
     })
   }
 

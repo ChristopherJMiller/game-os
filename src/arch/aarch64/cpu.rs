@@ -1,6 +1,7 @@
-use cortex_a::asm;
 use core::arch::asm;
+
 pub use bare_metal::{CriticalSection, Mutex};
+use cortex_a::asm;
 
 /// Stop execution on core.
 #[inline(always)]
@@ -33,7 +34,10 @@ pub fn enable_interrupts() {
 }
 
 #[inline]
-pub fn free<F, R>(f: F) -> R where F: FnOnce(&CriticalSection) -> R {
+pub fn free<F, R>(f: F) -> R
+where
+  F: FnOnce(&CriticalSection) -> R,
+{
   disable_interrupts();
   let r = f(unsafe { &CriticalSection::new() });
   enable_interrupts();

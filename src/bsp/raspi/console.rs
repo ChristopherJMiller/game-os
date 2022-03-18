@@ -4,10 +4,13 @@
 
 //! Console BSP
 
+use core::cell::RefCell;
+use core::fmt::{self, Arguments, Result};
+
 use bare_metal::Mutex;
 
-use crate::{io::console, cpu::free};
-use core::{fmt::{self, Arguments, Result}, cell::RefCell};
+use crate::cpu::free;
+use crate::io::console;
 
 /// Global QEMU std out handler
 static QEMU_OUTPUT: QEMUOutput = QEMUOutput::new();
@@ -23,8 +26,8 @@ struct QEMUOutput {
 
 impl QEMUOutput {
   pub const fn new() -> Self {
-    Self { 
-      inner: Mutex::new(RefCell::new(QEMUOutputInner::new()))
+    Self {
+      inner: Mutex::new(RefCell::new(QEMUOutputInner::new())),
     }
   }
 }
@@ -66,7 +69,8 @@ pub fn console() -> &'static impl console::interface::Write {
   &QEMU_OUTPUT
 }
 
-/// Returns a new reference to the console, should only be used when something is panicking.
+/// Returns a new reference to the console, should only be used when something
+/// is panicking.
 pub fn new_console() -> impl console::interface::Write {
   QEMUOutput::new()
 }

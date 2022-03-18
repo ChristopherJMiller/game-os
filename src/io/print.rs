@@ -1,8 +1,9 @@
 //! Console Printing
 
-use crate::bsp;
-use super::console;
 use core::fmt;
+
+use super::console;
+use crate::bsp;
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
@@ -26,14 +27,14 @@ macro_rules! print {
   ($($arg:tt)*) => ($crate::print::_print(format_args!($($arg)*)));
 }
 
-/// Prints without a newline. Used with panicking, as it creates new object instances to bypass locks.
+/// Prints without a newline. Used with panicking, as it creates new object
+/// instances to bypass locks.
 ///
 /// Carbon copy from <https://doc.rust-lang.org/src/std/macros.rs.html>
 #[macro_export]
 macro_rules! panic_print {
   ($($arg:tt)*) => ($crate::print::_print(format_args!($($arg)*)));
 }
-
 
 /// Prints with a newline.
 ///
@@ -46,7 +47,8 @@ macro_rules! println {
   })
 }
 
-/// Prints with a newline. Used with panicking, as it creates new object instances to bypass locks.
+/// Prints with a newline. Used with panicking, as it creates new object
+/// instances to bypass locks.
 ///
 /// Carbon copy from <https://doc.rust-lang.org/src/std/macros.rs.html>
 #[macro_export]

@@ -7,17 +7,21 @@
 
 use core::time::Duration;
 
-use crate::{mem::init_heap, graphics::{init_fb, ui::{UiInterface, get_ui_entrypoint}}, time::{interface::TimeManager, time_manager}};
+use crate::graphics::init_fb;
+use crate::graphics::ui::{get_ui_entrypoint, UiInterface};
+use crate::mem::init_heap;
+use crate::time::interface::TimeManager;
+use crate::time::time_manager;
 
 extern crate alloc;
 
-mod cpu;
 mod bsp;
-mod panic_wait;
-mod io;
-mod time;
-mod mem;
+mod cpu;
 mod graphics;
+mod io;
+mod mem;
+mod panic_wait;
+mod time;
 
 const TARGET_FPS: u32 = 60;
 const TARGET_DT: f32 = 1.0 / TARGET_FPS as f32;
